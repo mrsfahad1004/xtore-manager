@@ -1,0 +1,386 @@
+<div id="ai-chatbox">
+  <div id="chat-toggle" onclick="toggleChat()">
+    <i class="fas fa-robot"></i>
+  </div>
+  
+  <div id="chat-window" class="hidden">
+    <div id="chat-header">
+      <div class="d-flex align-items-center gap-2">
+        <div style="width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div>
+          <strong style="font-size:14px;">Xtore AI Agent</strong>
+          <div style="font-size:10px;opacity:0.7;display:flex;align-items:center;gap:4px;">
+            <span style="width:6px;height:6px;background:#4ade80;border-radius:50%;display:inline-block;"></span>
+            Online
+          </div>
+        </div>
+      </div>
+      <div class="d-flex gap-1">
+        <button onclick="clearChat()" class="btn btn-sm text-white" title="Clear"><i class="fas fa-eraser"></i></button>
+        <button onclick="toggleChat()" class="btn btn-sm text-white"><i class="fas fa-times"></i></button>
+      </div>
+    </div>
+    
+    <div id="chat-messages"></div>
+    
+    <div id="chat-tools-panel" class="hidden">
+      <div class="tools-grid" id="tools-grid"></div>
+    </div>
+    
+    <div id="chat-input-area">
+      <div id="quick-actions">
+        <button onclick="quickSend('dashboard')"><i class="fas fa-chart-line"></i></button>
+        <button onclick="quickSend('products')"><i class="fas fa-box"></i></button>
+        <button onclick="quickSend('orders')"><i class="fas fa-shopping-cart"></i></button>
+        <button onclick="quickSend('customers')"><i class="fas fa-users"></i></button>
+        <button onclick="quickSend('inventory')"><i class="fas fa-warehouse"></i></button>
+        <button onclick="toggleTools()"><i class="fas fa-th"></i></button>
+      </div>
+      <div class="input-group">
+        <input type="text" id="chat-input" placeholder="Command do..." onkeypress="handleKey(event)" autocomplete="off">
+        <button onclick="sendMessage()" id="send-btn"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+#ai-chatbox{position:fixed;bottom:20px;right:20px;z-index:99999;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+
+#chat-toggle{
+  width:56px;height:56px;
+  background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+  border-radius:16px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:0 4px 20px rgba(102,126,234,0.5);
+  transition:all .3s;color:white;font-size:22px;
+}
+#chat-toggle:hover{transform:scale(1.08);box-shadow:0 6px 25px rgba(102,126,234,0.7);}
+
+#chat-window{
+  position:absolute;bottom:68px;right:0;width:420px;height:600px;
+  background:#fff;border-radius:16px;
+  box-shadow:0 12px 50px rgba(0,0,0,0.2);
+  display:flex;flex-direction:column;overflow:hidden;
+  animation:slideIn .25s ease;
+}
+@keyframes slideIn{from{opacity:0;transform:translateY(15px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+#chat-window.hidden{display:none;}
+
+#chat-header{
+  background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);
+  color:white;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;
+}
+
+#chat-messages{
+  flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;
+  background:#f7f8fa;
+}
+#chat-messages::-webkit-scrollbar{width:3px;}
+#chat-messages::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px;}
+
+.msg{display:flex;gap:8px;max-width:88%;animation:msgIn .3s ease;}
+@keyframes msgIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.bot-msg{align-self:flex-start;}
+.user-msg{align-self:flex-end;flex-direction:row-reverse;}
+
+.msg-avatar{
+  width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:12px;
+}
+.bot-msg .msg-avatar{background:linear-gradient(135deg,#667eea,#764ba2);color:white;}
+.user-msg .msg-avatar{background:linear-gradient(135deg,#43e97b,#38f9d7);color:white;}
+
+.msg-body{background:white;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.55;
+  box-shadow:0 1px 4px rgba(0,0,0,0.05);word-break:break-word;}
+.user-msg .msg-body{background:linear-gradient(135deg,#667eea,#764ba2);color:white;}
+
+.msg-body strong{color:#1a1a2e;}
+.user-msg .msg-body strong{color:white;}
+.msg-body code{background:rgba(0,0,0,0.05);padding:1px 5px;border-radius:4px;font-size:12px;}
+.msg-body em{color:#999;font-size:11px;}
+
+/* Tool execution display */
+.tool-exec{
+  background:#f0f4ff;border-left:3px solid #667eea;border-radius:0 8px 8px 0;
+  padding:10px 14px;margin:6px 0;font-size:12px;
+}
+.tool-exec-header{
+  display:flex;align-items:center;gap:6px;margin-bottom:6px;
+  font-weight:600;color:#667eea;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;
+}
+.tool-exec-header i{font-size:12px;}
+.tool-exec table{width:100%;font-size:12px;border-collapse:collapse;}
+.tool-exec th{text-align:left;padding:4px 8px;background:rgba(102,126,234,0.08);font-size:10px;text-transform:uppercase;color:#888;}
+.tool-exec td{padding:4px 8px;border-bottom:1px solid rgba(0,0,0,0.04);}
+.tool-exec .status-ok{color:#22c55e;font-weight:600;}
+.tool-exec .status-warn{color:#f59e0b;font-weight:600;}
+.tool-exec .status-error{color:#ef4444;font-weight:600;}
+
+.tool-success{background:#f0fdf4;border-left:3px solid #22c55e;padding:10px 14px;border-radius:0 8px 8px 0;margin:6px 0;font-size:12px;}
+.tool-success i{color:#22c55e;}
+
+.tool-error{background:#fef2f2;border-left:3px solid #ef4444;padding:10px 14px;border-radius:0 8px 8px 0;margin:6px 0;font-size:12px;}
+.tool-error i{color:#ef4444;}
+
+.tool-detail{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:10px 14px;margin:6px 0;font-size:12px;}
+.tool-detail-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f5f5f5;}
+.tool-detail-row:last-child{border-bottom:none;}
+.tool-detail-label{color:#888;font-size:11px;}
+.tool-detail-value{font-weight:500;font-size:12px;}
+
+.tool-code{background:#1a1a2e;color:#a8e6cf;padding:10px 14px;border-radius:8px;font-family:'Fira Code',monospace;font-size:11px;overflow-x:auto;margin:6px 0;white-space:pre-wrap;max-height:200px;overflow-y:auto;}
+
+/* Tool cards grid */
+#chat-tools-panel{
+  border-top:1px solid #eee;background:white;padding:12px;max-height:200px;overflow-y:auto;
+}
+#chat-tools-panel.hidden{display:none;}
+.tools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.tool-card{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:8px 4px;border-radius:8px;cursor:pointer;transition:all .15s;
+  border:1px solid transparent;text-align:center;
+}
+.tool-card:hover{background:#f0f4ff;border-color:#667eea;}
+.tool-card i{font-size:16px;padding:6px;border-radius:8px;color:white;}
+.tool-card span{font-size:10px;color:#555;line-height:1.2;}
+
+/* Typing */
+.typing{display:flex;gap:4px;padding:8px 12px;background:white;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.05);width:fit-content;}
+.typing span{width:5px;height:5px;background:#bbb;border-radius:50%;animation:typeBounce 1.4s infinite;}
+.typing span:nth-child(2){animation-delay:.2s;}
+.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes typeBounce{0%,60%,100%{transform:translateY(0);opacity:.3}30%{transform:translateY(-4px);opacity:1}}
+
+/* Quick actions */
+#quick-actions{display:flex;gap:4px;padding:8px 12px 4px;}
+#quick-actions button{
+  width:32px;height:32px;border-radius:8px;border:1px solid #eee;background:white;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font-size:12px;color:#666;transition:all .15s;
+}
+#quick-actions button:hover{background:#667eea;color:white;border-color:#667eea;}
+
+#chat-input-area{padding:8px 12px 12px;background:white;border-top:1px solid #eee;}
+#chat-input-area .input-group{display:flex;gap:6px;}
+#chat-input{
+  flex:1;border:1px solid #e0e0e0;border-radius:10px;padding:10px 14px;font-size:13px;outline:none;
+  transition:border-color .2s;
+}
+#chat-input:focus{border-color:#667eea;}
+#send-btn{
+  background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;
+  border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;flex-shrink:0;
+}
+#send-btn:hover{transform:scale(1.05);}
+#send-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+@media(max-width:768px){
+  #chat-window{width:calc(100vw - 24px);height:75vh;right:-8px;}
+}
+</style>
+
+<script>
+let chatOpen = false;
+let toolsOpen = false;
+
+function toggleChat(){
+  chatOpen = !chatOpen;
+  document.getElementById('chat-window').classList.toggle('hidden', !chatOpen);
+  if(chatOpen && !document.querySelector('#chat-messages .msg')) showWelcome();
+  if(chatOpen) document.getElementById('chat-input').focus();
+}
+
+function showWelcome(){
+  addBotMsg(`**Welcome!** Main Xtore AI Agent hoon.\n\nMujhe kuch bhi command do - main store manage karunga. Products, orders, customers, inventory - sab handle karta hoon.\n\nQuick buttons ya type karo.`);
+  loadTools();
+}
+
+async function loadTools(){
+  try{
+    const res = await fetch('/api/chat/tools');
+    const data = await res.json();
+    const grid = document.getElementById('tools-grid');
+    grid.innerHTML = '';
+    data.tools.forEach(t => {
+      grid.innerHTML += `<div class="tool-card" onclick="useTool('${t.id}')">
+        <i class="${t.icon}" style="background:${t.color};"></i>
+        <span>${t.name}</span>
+      </div>`;
+    });
+  }catch(e){}
+}
+
+function toggleTools(){
+  toolsOpen = !toolsOpen;
+  document.getElementById('chat-tools-panel').classList.toggle('hidden', !toolsOpen);
+}
+
+function useTool(id){
+  const toolMap = {
+    dashboard: 'dashboard', list_products: 'products', list_orders: 'orders',
+    list_customers: 'customers', list_inventory: 'inventory', low_stock: 'low stock',
+    shop_info: 'shop info', list_collections: 'collections', list_files: 'list files'
+  };
+  document.getElementById('chat-input').value = toolMap[id] || id;
+  sendMessage();
+}
+
+function handleKey(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}
+}
+
+function quickSend(text){
+  document.getElementById('chat-input').value = text;
+  sendMessage();
+}
+
+function addBotMsg(text){
+  const c = document.getElementById('chat-messages');
+  const d = document.createElement('div');
+  d.className = 'msg bot-msg';
+  const formatted = text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/_(.*?)_/g, '<em>$1</em>')
+    .replace(/`(.*?)`/g, '<code>$1</code>')
+    .replace(/\n/g, '<br>');
+  d.innerHTML = `<div class="msg-avatar"><i class="fas fa-robot"></i></div><div class="msg-body">${formatted}</div>`;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+}
+
+function addBotToolResult(result){
+  const c = document.getElementById('chat-messages');
+  const d = document.createElement('div');
+  d.className = 'msg bot-msg';
+  let html = '';
+
+  if(result.type === 'table' && result.rows?.length){
+    let tableHtml = `<div class="tool-exec">
+      <div class="tool-exec-header"><i class="${result.tool_icon || 'fas fa-cog'}"></i> ${result.title}</div>
+      <table><thead><tr>${(result.columns||[]).map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`;
+    result.rows.forEach(row => {
+      tableHtml += '<tr>' + row.map(cell => {
+        let cls = '';
+        if(cell === 'OUT OF STOCK') cls = 'class="status-error"';
+        else if(cell === 'LOW') cls = 'class="status-warn"';
+        else if(cell === 'OK') cls = 'class="status-ok"';
+        return `<td ${cls}>${cell}</td>`;
+      }).join('') + '</tr>';
+    });
+    tableHtml += '</tbody></table></div>';
+    html = tableHtml;
+  } else if(result.type === 'success'){
+    html = `<div class="tool-success"><i class="fas fa-check-circle me-1"></i> <strong>${result.title}</strong><br>${result.message}${result.link ? `<br><a href="${result.link}" target="_blank" style="color:#667eea;font-size:11px;">Open in Shopify Admin →</a>` : ''}</div>`;
+  } else if(result.type === 'error'){
+    html = `<div class="tool-error"><i class="fas fa-exclamation-circle me-1"></i> ${result.message}</div>`;
+  } else if(result.type === 'detail' && result.data){
+    html = `<div class="tool-detail"><div class="tool-exec-header"><i class="${result.tool_icon || 'fas fa-info-circle'}"></i> ${result.title}</div>`;
+    Object.entries(result.data).forEach(([k,v]) => {
+      html += `<div class="tool-detail-row"><span class="tool-detail-label">${k}</span><span class="tool-detail-value">${v}</span></div>`;
+    });
+    if(result.link) html += `<a href="${result.link}" target="_blank" style="color:#667eea;font-size:11px;display:block;margin-top:6px;">Open in Shopify →</a>`;
+    html += '</div>';
+  } else if(result.type === 'code'){
+    html = `<div class="tool-exec"><div class="tool-exec-header"><i class="fas fa-terminal"></i> ${result.title}</div><div class="tool-code">${escapeHtml(result.content)}</div></div>`;
+  } else if(result.type === 'filelist' && result.files){
+    html = `<div class="tool-exec"><div class="tool-exec-header"><i class="fas fa-folder-open"></i> ${result.title}</div>`;
+    result.files.forEach(f => {
+      const icon = f.type === 'folder' ? 'fa-folder' : 'fa-file';
+      const color = f.type === 'folder' ? '#f5a623' : '#667eea';
+      html += `<div style="display:flex;align-items:center;gap:6px;padding:3px 0;font-size:12px;"><i class="fas ${icon}" style="color:${color};width:14px;"></i> ${f.name} <span style="color:#999;font-size:10px;">${f.size}</span></div>`;
+    });
+    html += '</div>';
+  } else if(result.type === 'greeting'){
+    addBotMsg(result.message);
+    return;
+  } else if(result.type === 'help' && result.tools){
+    let toolCards = '<div class="tool-exec"><div class="tool-exec-header"><i class="fas fa-tools"></i> All Available Tools</div>';
+    result.tools.forEach(t => {
+      toolCards += `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f0f0f0;cursor:pointer;" onclick="useTool('${t.id}')">
+        <i class="${t.icon}" style="color:${t.color};width:16px;font-size:12px;"></i>
+        <div><strong style="font-size:12px;">${t.name}</strong> <span style="font-size:11px;color:#888;">${t.description}</span></div>
+      </div>`;
+    });
+    toolCards += '</div>';
+    html = toolCards;
+  } else if(result.message){
+    addBotMsg(result.message);
+    return;
+  } else {
+    addBotMsg('Kuch samajh nahi aaya. Try **help**.');
+    return;
+  }
+
+  d.innerHTML = `<div class="msg-avatar"><i class="fas fa-robot"></i></div><div class="msg-body">${html}</div>`;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+}
+
+function addUserMsg(text){
+  const c = document.getElementById('chat-messages');
+  const d = document.createElement('div');
+  d.className = 'msg user-msg';
+  d.innerHTML = `<div class="msg-avatar"><i class="fas fa-user"></i></div><div class="msg-body">${escapeHtml(text)}</div>`;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+}
+
+function showTyping(){
+  const c = document.getElementById('chat-messages');
+  const d = document.createElement('div');
+  d.className = 'msg bot-msg';
+  d.id = 'typing';
+  d.innerHTML = `<div class="msg-avatar"><i class="fas fa-robot"></i></div><div class="typing"><span></span><span></span><span></span></div>`;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+}
+
+function hideTyping(){document.getElementById('typing')?.remove();}
+
+async function sendMessage(){
+  const input = document.getElementById('chat-input');
+  const btn = document.getElementById('send-btn');
+  const msg = input.value.trim();
+  if(!msg) return;
+  
+  addUserMsg(msg);
+  input.value = '';
+  btn.disabled = true;
+  showTyping();
+  
+  try{
+    const res = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({message:msg})
+    });
+    const data = await res.json();
+    hideTyping();
+    
+    if(data.tool_used){
+      addBotToolResult(data);
+    } else {
+      addBotMsg(data.text || data.message || 'Kuch samajh nahi aaya.');
+    }
+  }catch(e){
+    hideTyping();
+    addBotMsg('Connection error. Try again.');
+  }
+  
+  btn.disabled = false;
+  input.focus();
+}
+
+function clearChat(){
+  document.getElementById('chat-messages').innerHTML = '';
+  showWelcome();
+}
+
+function escapeHtml(str){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>

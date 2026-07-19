@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: xtore-manager
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SHOPIFY_STORE_URL
+        sync: false
+      - key: SHOPIFY_CLIENT_ID
+        sync: false
+      - key: SHOPIFY_CLIENT_SECRET
+        sync: false
+      - key: SHOPIFY_SCOPES
+        value: read_products,write_products,read_orders,write_orders,read_customers,write_customers,read_inventory,read_content,read_themes,write_themes

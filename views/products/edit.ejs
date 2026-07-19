@@ -1,0 +1,125 @@
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-edit me-2"></i>Edit Product</h2>
+        <a href="/products/<%= product.id %>" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+    
+    <div class="card">
+        <div class="card-body">
+            <form action="/products/<%= product.id %>?_method=PUT" method="POST">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label class="form-label">Product Title *</label>
+                            <input type="text" class="form-control" name="title" value="<%= product.title %>" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" name="body_html" rows="6"><%= product.body_html %></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Vendor</label>
+                                    <input type="text" class="form-control" name="vendor" value="<%= product.vendor %>">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Product Type</label>
+                                    <input type="text" class="form-control" name="product_type" value="<%= product.product_type %>">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Tags (comma separated)</label>
+                            <input type="text" class="form-control" name="tags" value="<%= product.tags %>">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" name="status">
+                                <option value="active" <%= product.status === 'active' ? 'selected' : '' %>>Active</option>
+                                <option value="draft" <%= product.status === 'draft' ? 'selected' : '' %>>Draft</option>
+                                <option value="archived" <%= product.status === 'archived' ? 'selected' : '' %>>Archived</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h6 class="mb-0">Pricing</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Price *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" name="variants[0][price]" value="<%= product.variants[0]?.price %>" step="0.01" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Compare at Price</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" name="variants[0][compare_at_price]" value="<%= product.variants[0]?.compare_at_price %>" step="0.01">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-3">
+                            <div class="card-header bg-white">
+                                <h6 class="mb-0">Inventory</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">SKU</label>
+                                    <input type="text" class="form-control" name="variants[0][sku]" value="<%= product.variants[0]?.sku %>">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Barcode</label>
+                                    <input type="text" class="form-control" name="variants[0][barcode]" value="<%= product.variants[0]?.barcode %>">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-3">
+                            <div class="card-header bg-white">
+                                <h6 class="mb-0">Shipping</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Weight</label>
+                                    <input type="number" class="form-control" name="variants[0][weight]" value="<%= product.variants[0]?.weight %>" step="0.01">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Weight Unit</label>
+                                    <select class="form-select" name="variants[0][weight_unit]">
+                                        <option value="kg" <%= product.variants[0]?.weight_unit === 'kg' ? 'selected' : '' %>>kg</option>
+                                        <option value="g" <%= product.variants[0]?.weight_unit === 'g' ? 'selected' : '' %>>g</option>
+                                        <option value="lb" <%= product.variants[0]?.weight_unit === 'lb' ? 'selected' : '' %>>lb</option>
+                                        <option value="oz" <%= product.variants[0]?.weight_unit === 'oz' ? 'selected' : '' %>>oz</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Update Product
+                    </button>
+                    <a href="/products/<%= product.id %>" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

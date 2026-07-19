@@ -1,0 +1,134 @@
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-box me-2"></i><%= product.title %></h2>
+        <div>
+            <a href="/products/<%= product.id %>/edit" class="btn btn-warning">
+                <i class="fas fa-edit me-2"></i>Edit
+            </a>
+            <a href="/products" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back
+            </a>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Product Details</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td class="text-muted" style="width: 200px;">Title:</td>
+                            <td><strong><%= product.title %></strong></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Vendor:</td>
+                            <td><%= product.vendor %></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Product Type:</td>
+                            <td><%= product.product_type %></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Status:</td>
+                            <td>
+                                <% if (product.status === 'active') { %>
+                                    <span class="badge bg-success">Active</span>
+                                <% } else { %>
+                                    <span class="badge bg-secondary"><%= product.status %></span>
+                                <% } %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Created:</td>
+                            <td><%= new Date(product.created_at).toLocaleDateString() %></td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Updated:</td>
+                            <td><%= new Date(product.updated_at).toLocaleDateString() %></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Variants -->
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Variants</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Price</th>
+                                    <th>SKU</th>
+                                    <th>Inventory</th>
+                                    <th>Weight</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% product.variants.forEach(variant => { %>
+                                <tr>
+                                    <td><%= variant.title %></td>
+                                    <td>$<%= variant.price %></td>
+                                    <td><%= variant.sku || 'N/A' %></td>
+                                    <td><%= variant.inventory_quantity || 0 %></td>
+                                    <td><%= variant.weight || 0 %> <%= variant.weight_unit %></td>
+                                </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Description -->
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Description</h5>
+                </div>
+                <div class="card-body">
+                    <%- product.body_html || '<p class="text-muted">No description</p>' %>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <!-- Images -->
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Images</h5>
+                </div>
+                <div class="card-body">
+                    <% if (product.images && product.images.length > 0) { %>
+                        <% product.images.forEach(image => { %>
+                            <img src="<%= image.src %>" alt="" class="img-fluid mb-2" style="border-radius: 8px;">
+                        <% }); %>
+                    <% } else { %>
+                        <p class="text-muted">No images</p>
+                    <% } %>
+                </div>
+            </div>
+            
+            <!-- Tags -->
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Tags</h5>
+                </div>
+                <div class="card-body">
+                    <% if (product.tags) { %>
+                        <% product.tags.split(', ').forEach(tag => { %>
+                            <span class="badge bg-primary me-1 mb-1"><%= tag %></span>
+                        <% }); %>
+                    <% } else { %>
+                        <p class="text-muted">No tags</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
