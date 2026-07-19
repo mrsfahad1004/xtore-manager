@@ -1,73 +1,60 @@
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><i class="fas fa-warehouse me-2"></i>Inventory Management</h2>
-        <div>
-            <select class="form-select form-select-sm" onchange="window.location.href='?location='+this.value" style="width: auto; display: inline-block;">
-                <% locations.forEach(location => { %>
-                    <option value="<%= location.id %>" <%= selectedLocation == location.id ? 'selected' : '' %>><%= location.name %></option>
-                <% }); %>
-            </select>
-        </div>
-    </div>
-    
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>SKU</th>
-                            <th>Available</th>
-                            <th>Adjust</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% inventory.forEach(item => { %>
-                        <tr>
-                            <td><strong><%= item.inventory_item_id %></strong></td>
-                            <td><%= item.sku || 'N/A' %></td>
-                            <td>
-                                <span class="badge bg-<%= item.available > 0 ? 'success' : 'danger' %>">
-                                    <%= item.available || 0 %>
-                                </span>
-                            </td>
-                            <td>
-                                <form action="/inventory/adjust" method="POST" class="d-inline">
-                                    <input type="hidden" name="inventory_item_id" value="<%= item.inventory_item_id %>">
-                                    <input type="hidden" name="location_id" value="<%= selectedLocation %>">
-                                    <div class="input-group input-group-sm" style="width: 200px;">
-                                        <input type="number" class="form-control" name="available" value="<%= item.available || 0 %>" required>
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-save"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-info" onclick="showItemDetails(<%= item.inventory_item_id %>)">
-                                    <i class="fas fa-info-circle"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
-            </div>
-            
-            <% if (inventory.length === 0) { %>
-                <div class="text-center py-4">
-                    <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
-                    <p class="text-muted">No inventory items found</p>
-                </div>
-            <% } %>
-        </div>
-    </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 style="font-weight:700;font-size:22px;"><i class="fas fa-warehouse" style="color:var(--gold);margin-right:10px;"></i>Inventory Management</h2>
+    <select onchange="window.location.href='?location='+this.value" style="background:var(--dark-card);border:1px solid var(--border);border-radius:10px;padding:8px 14px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;cursor:pointer;">
+        <% locations.forEach(location => { %>
+            <option value="<%= location.id %>" <%= selectedLocation == location.id ? 'selected' : '' %>><%= location.name %></option>
+        <% }); %>
+    </select>
 </div>
 
-<script>
-function showItemDetails(itemId) {
-    alert('Inventory Item ID: ' + itemId + '\n\nUse the Shopify Admin to view full item details.');
-}
-</script>
+<div class="card-3d">
+    <div class="card-head">
+        <h6><i class="fas fa-boxes" style="color:var(--gold);"></i> Inventory Items</h6>
+    </div>
+    <div class="card-body-padded" style="overflow-x:auto;">
+        <% if (inventory.length === 0) { %>
+            <div class="text-center py-5">
+                <i class="fas fa-box-open fa-3x" style="color:var(--text-dim);margin-bottom:12px;"></i>
+                <p style="color:var(--text-dim);">No inventory items found</p>
+            </div>
+        <% } else { %>
+            <table class="table-3d">
+                <thead>
+                    <tr>
+                        <th>Item ID</th>
+                        <th>SKU</th>
+                        <th>Available</th>
+                        <th>Adjust</th>
+                        <th>Info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% inventory.forEach(item => { %>
+                    <tr>
+                        <td><strong><%= item.inventory_item_id %></strong></td>
+                        <td style="color:var(--text-dim);"><%= item.sku || 'N/A' %></td>
+                        <td>
+                            <% if (item.available > 0) { %>
+                                <span style="padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;background:rgba(62,207,142,0.15);color:#3ecf8e;"><%= item.available || 0 %></span>
+                            <% } else { %>
+                                <span style="padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;background:rgba(215,74,93,0.15);color:var(--red);"><%= item.available || 0 %></span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <form action="/inventory/adjust" method="POST" style="display:flex;gap:6px;">
+                                <input type="hidden" name="inventory_item_id" value="<%= item.inventory_item_id %>">
+                                <input type="hidden" name="location_id" value="<%= selectedLocation %>">
+                                <input type="number" name="available" value="<%= item.available || 0 %>" required style="width:70px;background:var(--dark-card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text);font-size:12px;font-family:'Space Grotesk',sans-serif;outline:none;">
+                                <button type="submit" style="background:linear-gradient(135deg,var(--gold),var(--orange));color:var(--dark);border:none;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:12px;"><i class="fas fa-save"></i></button>
+                            </form>
+                        </td>
+                        <td>
+                            <button onclick="alert('Inventory Item ID: <%= item.inventory_item_id %>')" style="width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;display:inline-flex;align-items:center;justify-content:center;color:var(--text-dim);cursor:pointer;transition:all 0.2s;"><i class="fas fa-info-circle" style="font-size:12px;"></i></button>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+</div>

@@ -1,176 +1,109 @@
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><i class="fas fa-shopping-cart me-2"></i>Order #<%= order.order_number %></h2>
-        <div>
-            <% if (order.financial_status !== 'cancelled' && order.fulfillment_status !== 'fulfilled') { %>
-                <form action="/orders/<%= order.id %>/cancel" method="POST" class="d-inline">
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this order?')">
-                        <i class="fas fa-times me-2"></i>Cancel Order
-                    </button>
-                </form>
-            <% } %>
-            <a href="/orders" class="btn btn-secondary">
-                <i class="fas fa-arrow-left me-2"></i>Back
-            </a>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 style="font-weight:700;font-size:22px;"><i class="fas fa-shopping-bag" style="color:var(--gold);margin-right:10px;"></i>Order #<%= order.order_number %></h2>
+    <div style="display:flex;gap:8px;">
+        <% if (order.financial_status !== 'cancelled' && order.fulfillment_status !== 'fulfilled') { %>
+            <form action="/orders/<%= order.id %>/cancel" method="POST" class="d-inline">
+                <button type="submit" onclick="return confirm('Cancel this order?')" style="background:rgba(215,74,93,0.15);border:1px solid rgba(215,74,93,0.3);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--red);cursor:pointer;display:inline-flex;align-items:center;gap:8px;"><i class="fas fa-times"></i> Cancel</button>
+            </form>
+        <% } %>
+        <a href="/orders" style="background:var(--dark-card);border:1px solid var(--border);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;display:inline-flex;align-items:center;gap:8px;"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card-3d mb-4">
+            <div class="card-head"><h6><i class="fas fa-list-ul" style="color:var(--gold);"></i> Order Items</h6></div>
+            <div class="card-body-padded" style="overflow-x:auto;">
+                <table class="table-3d">
+                    <thead><tr><th>Product</th><th>Variant</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
+                    <tbody>
+                        <% order.line_items.forEach(item => { %>
+                        <tr>
+                            <td><%= item.title %></td>
+                            <td style="color:var(--text-dim);"><%= item.variant_title || 'Default' %></td>
+                            <td><%= item.quantity %></td>
+                            <td>$<%= item.price %></td>
+                            <td><strong>$<%= item.price * item.quantity %></strong></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                    <tfoot>
+                        <tr><td colspan="4" style="text-align:right;color:var(--text-dim);">Subtotal:</td><td><strong>$<%= order.subtotal_price %></strong></td></tr>
+                        <tr><td colspan="4" style="text-align:right;color:var(--text-dim);">Shipping:</td><td><strong>$<%= order.total_shipping_price || '0.00' %></strong></td></tr>
+                        <tr><td colspan="4" style="text-align:right;color:var(--text-dim);">Tax:</td><td><strong>$<%= order.total_tax %></strong></td></tr>
+                        <tr><td colspan="4" style="text-align:right;color:var(--gold);font-weight:700;">Total:</td><td><strong style="color:var(--gold);font-size:15px;">$<%= order.total_price %></strong></td></tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-3d">
+            <div class="card-head"><h6><i class="fas fa-truck" style="color:var(--gold);"></i> Shipping Address</h6></div>
+            <div class="card-body-padded">
+                <% if (order.shipping_address) { %>
+                    <div class="info-row"><span class="info-label">Name</span><span class="info-value"><%= order.shipping_address.name %></span></div>
+                    <div class="info-row"><span class="info-label">Address</span><span class="info-value"><%= order.shipping_address.address1 %><% if (order.shipping_address.address2) { %><br><%= order.shipping_address.address2 %><% } %></span></div>
+                    <div class="info-row"><span class="info-label">City</span><span class="info-value"><%= order.shipping_address.city %>, <%= order.shipping_address.province %> <%= order.shipping_address.zip %></span></div>
+                    <div class="info-row"><span class="info-label">Country</span><span class="info-value"><%= order.shipping_address.country %></span></div>
+                <% } else { %>
+                    <p style="color:var(--text-dim);text-align:center;padding:20px 0;">No shipping address</p>
+                <% } %>
+            </div>
         </div>
     </div>
-    
-    <div class="row">
-        <div class="col-md-8">
-            <!-- Order Items -->
-            <div class="card mb-4">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">Order Items</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Variant</th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% order.line_items.forEach(item => { %>
-                                <tr>
-                                    <td><%= item.title %></td>
-                                    <td><%= item.variant_title || 'Default' %></td>
-                                    <td><%= item.quantity %></td>
-                                    <td>$<%= item.price %></td>
-                                    <td><strong>$<%= item.price * item.quantity %></strong></td>
-                                </tr>
-                                <% }); %>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="4" class="text-end">Subtotal:</td>
-                                    <td><strong>$<%= order.subtotal_price %></strong></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="text-end">Shipping:</td>
-                                    <td><strong>$<%= order.total_shipping_price || '0.00' %></strong></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="text-end">Tax:</td>
-                                    <td><strong>$<%= order.total_tax %></strong></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="text-end"><strong>Total:</strong></td>
-                                    <td><strong>$<%= order.total_price %></strong></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Shipping Address -->
-            <div class="card">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">Shipping Address</h5>
-                </div>
-                <div class="card-body">
-                    <% if (order.shipping_address) { %>
-                        <p class="mb-1"><%= order.shipping_address.name %></p>
-                        <p class="mb-1"><%= order.shipping_address.address1 %></p>
-                        <% if (order.shipping_address.address2) { %>
-                            <p class="mb-1"><%= order.shipping_address.address2 %></p>
-                        <% } %>
-                        <p class="mb-1"><%= order.shipping_address.city %>, <%= order.shipping_address.province %> <%= order.shipping_address.zip %></p>
-                        <p class="mb-0"><%= order.shipping_address.country %></p>
+
+    <div class="col-md-4">
+        <div class="card-3d mb-4">
+            <div class="card-head"><h6><i class="fas fa-file-invoice" style="color:var(--gold);"></i> Order Summary</h6></div>
+            <div class="card-body-padded">
+                <div class="info-row"><span class="info-label">Order #</span><span class="info-value">#<%= order.order_number %></span></div>
+                <div class="info-row"><span class="info-label">Date</span><span class="info-value"><%= new Date(order.created_at).toLocaleString() %></span></div>
+                <div class="info-row"><span class="info-label">Status</span><span class="info-value">
+                    <% if (order.cancelled) { %>
+                        <span style="padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;background:rgba(215,74,93,0.15);color:var(--red);">Cancelled</span>
                     <% } else { %>
-                        <p class="text-muted">No shipping address</p>
+                        <span style="padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;background:rgba(62,207,142,0.15);color:#3ecf8e;">Active</span>
                     <% } %>
-                </div>
+                </span></div>
+                <div class="info-row"><span class="info-label">Payment</span><span class="info-value">
+                    <% if (order.financial_status === 'paid') { %>
+                        <span style="padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;background:rgba(62,207,142,0.15);color:#3ecf8e;">Paid</span>
+                    <% } else if (order.financial_status === 'pending') { %>
+                        <span style="padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;background:rgba(245,185,4,0.15);color:var(--gold);">Pending</span>
+                    <% } else { %>
+                        <span style="padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;background:var(--gold-dim);color:var(--text-dim);"><%= order.financial_status %></span>
+                    <% } %>
+                </span></div>
+                <div class="info-row"><span class="info-label">Fulfillment</span><span class="info-value">
+                    <% if (order.fulfillment_status === 'fulfilled') { %>
+                        <span style="padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;background:rgba(62,207,142,0.15);color:#3ecf8e;">Fulfilled</span>
+                    <% } else { %>
+                        <span style="padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;background:var(--gold-dim);color:var(--text-dim);">Unfulfilled</span>
+                    <% } %>
+                </span></div>
             </div>
         </div>
-        
-        <div class="col-md-4">
-            <!-- Order Summary -->
-            <div class="card mb-4">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">Order Summary</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table table-borderless">
-                        <tr>
-                            <td class="text-muted">Order Number:</td>
-                            <td><strong>#<%= order.order_number %></strong></td>
-                        </tr>
-                        <tr>
-                            <td class="text-muted">Date:</td>
-                            <td><%= new Date(order.created_at).toLocaleString() %></td>
-                        </tr>
-                        <tr>
-                            <td class="text-muted">Status:</td>
-                            <td>
-                                <% if (order.cancelled) { %>
-                                    <span class="badge bg-danger">Cancelled</span>
-                                <% } else { %>
-                                    <span class="badge bg-success">Active</span>
-                                <% } %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-muted">Financial:</td>
-                            <td>
-                                <% if (order.financial_status === 'paid') { %>
-                                    <span class="badge bg-success">Paid</span>
-                                <% } else if (order.financial_status === 'pending') { %>
-                                    <span class="badge bg-warning">Pending</span>
-                                <% } else { %>
-                                    <span class="badge bg-secondary"><%= order.financial_status %></span>
-                                <% } %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-muted">Fulfillment:</td>
-                            <td>
-                                <% if (order.fulfillment_status === 'fulfilled') { %>
-                                    <span class="badge bg-success">Fulfilled</span>
-                                <% } else { %>
-                                    <span class="badge bg-secondary">Unfulfilled</span>
-                                <% } %>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+
+        <div class="card-3d mb-4">
+            <div class="card-head"><h6><i class="fas fa-user" style="color:var(--gold);"></i> Customer</h6></div>
+            <div class="card-body-padded">
+                <% if (order.customer) { %>
+                    <div class="info-row"><span class="info-label">Name</span><span class="info-value"><strong><%= order.customer.first_name %> <%= order.customer.last_name %></strong></span></div>
+                    <div class="info-row"><span class="info-label">Email</span><span class="info-value"><%= order.customer.email %></span></div>
+                    <% if (order.customer.phone) { %><div class="info-row"><span class="info-label">Phone</span><span class="info-value"><%= order.customer.phone %></span></div><% } %>
+                    <a href="/customers/<%= order.customer.id %>" style="display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:8px 14px;border-radius:8px;border:1px solid var(--border);color:var(--gold);text-decoration:none;font-size:12px;font-weight:600;transition:all 0.2s;"><i class="fas fa-user"></i> View Customer</a>
+                <% } else { %>
+                    <p style="color:var(--text-dim);text-align:center;padding:20px 0;">Guest checkout</p>
+                <% } %>
             </div>
-            
-            <!-- Customer Info -->
-            <div class="card mb-4">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">Customer</h5>
-                </div>
-                <div class="card-body">
-                    <% if (order.customer) { %>
-                        <p class="mb-1"><strong><%= order.customer.first_name %> <%= order.customer.last_name %></strong></p>
-                        <p class="mb-1"><%= order.customer.email %></p>
-                        <p class="mb-0"><%= order.customer.phone %></p>
-                        <a href="/customers/<%= order.customer.id %>" class="btn btn-sm btn-outline-primary mt-2">
-                            <i class="fas fa-user me-1"></i>View Customer
-                        </a>
-                    <% } else { %>
-                        <p class="text-muted">Guest checkout</p>
-                    <% } %>
-                </div>
-            </div>
-            
-            <!-- Notes -->
-            <% if (order.note) { %>
-            <div class="card">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">Notes</h5>
-                </div>
-                <div class="card-body">
-                    <p class="mb-0"><%= order.note %></p>
-                </div>
-            </div>
-            <% } %>
         </div>
+
+        <% if (order.note) { %>
+        <div class="card-3d">
+            <div class="card-head"><h6><i class="fas fa-sticky-note" style="color:var(--gold);"></i> Notes</h6></div>
+            <div class="card-body-padded"><p style="margin:0;"><%= order.note %></p></div>
+        </div>
+        <% } %>
     </div>
 </div>

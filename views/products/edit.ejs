@@ -1,125 +1,67 @@
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><i class="fas fa-edit me-2"></i>Edit Product</h2>
-        <a href="/products/<%= product.id %>" class="btn btn-secondary">
-            <i class="fas fa-arrow-left me-2"></i>Back
-        </a>
-    </div>
-    
-    <div class="card">
-        <div class="card-body">
-            <form action="/products/<%= product.id %>?_method=PUT" method="POST">
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="mb-3">
-                            <label class="form-label">Product Title *</label>
-                            <input type="text" class="form-control" name="title" value="<%= product.title %>" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Description</label>
-                            <textarea class="form-control" name="body_html" rows="6"><%= product.body_html %></textarea>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Vendor</label>
-                                    <input type="text" class="form-control" name="vendor" value="<%= product.vendor %>">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Product Type</label>
-                                    <input type="text" class="form-control" name="product_type" value="<%= product.product_type %>">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Tags (comma separated)</label>
-                            <input type="text" class="form-control" name="tags" value="<%= product.tags %>">
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-select" name="status">
-                                <option value="active" <%= product.status === 'active' ? 'selected' : '' %>>Active</option>
-                                <option value="draft" <%= product.status === 'draft' ? 'selected' : '' %>>Draft</option>
-                                <option value="archived" <%= product.status === 'archived' ? 'selected' : '' %>>Archived</option>
-                            </select>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 style="font-weight:700;font-size:22px;"><i class="fas fa-edit" style="color:var(--gold);margin-right:10px;"></i>Edit Product</h2>
+    <a href="/products/<%= product.id %>" style="background:var(--dark-card);border:1px solid var(--border);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;display:inline-flex;align-items:center;gap:8px;"><i class="fas fa-arrow-left"></i> Back</a>
+</div>
+
+<div class="card-3d">
+    <div class="card-body-padded">
+        <form action="/products/<%= product.id %>?_method=PUT" method="POST">
+            <div class="row">
+                <div class="col-md-8">
+                    <div style="margin-bottom:18px;">
+                        <label style="display:block;font-size:12px;font-weight:600;color:var(--text-dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Product Title *</label>
+                        <input type="text" name="title" value="<%= product.title %>" required style="width:100%;background:var(--dark-card);border:1px solid var(--border);border-radius:10px;padding:11px 16px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;">
+                    </div>
+                    <div style="margin-bottom:18px;">
+                        <label style="display:block;font-size:12px;font-weight:600;color:var(--text-dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Description</label>
+                        <textarea name="body_html" rows="6" style="width:100%;background:var(--dark-card);border:1px solid var(--border);border-radius:10px;padding:11px 16px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;resize:vertical;"><%= product.body_html %></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><div style="margin-bottom:18px;"><label style="display:block;font-size:12px;font-weight:600;color:var(--text-dim);margin-bottom:6px;">Vendor</label><input type="text" name="vendor" value="<%= product.vendor %>" style="width:100%;background:var(--dark-card);border:1px solid var(--border);border-radius:10px;padding:11px 16px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;"></div></div>
+                        <div class="col-md-6"><div style="margin-bottom:18px;"><label style="display:block;font-size:12px;font-weight:600;color:var(--text-dim);margin-bottom:6px;">Product Type</label><input type="text" name="product_type" value="<%= product.product_type %>" style="width:100%;background:var(--dark-card);border:1px solid var(--border);border-radius:10px;padding:11px 16px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;"></div></div>
+                    </div>
+                    <div style="margin-bottom:18px;"><label style="display:block;font-size:12px;font-weight:600;color:var(--text-dim);margin-bottom:6px;">Tags (comma separated)</label><input type="text" name="tags" value="<%= product.tags %>" style="width:100%;background:var(--dark-card);border:1px solid var(--border);border-radius:10px;padding:11px 16px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;"></div>
+                    <div style="margin-bottom:18px;">
+                        <label style="display:block;font-size:12px;font-weight:600;color:var(--text-dim);margin-bottom:6px;">Status</label>
+                        <select name="status" style="width:100%;background:var(--dark-card);border:1px solid var(--border);border-radius:10px;padding:11px 16px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;cursor:pointer;">
+                            <option value="active" <%= product.status === 'active' ? 'selected' : '' %>>Active</option>
+                            <option value="draft" <%= product.status === 'draft' ? 'selected' : '' %>>Draft</option>
+                            <option value="archived" <%= product.status === 'archived' ? 'selected' : '' %>>Archived</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-3d mb-3">
+                        <div class="card-head"><h6>Pricing</h6></div>
+                        <div class="card-body-padded">
+                            <div style="margin-bottom:14px;"><label style="display:block;font-size:12px;font-weight:600;color:var(--text-dim);margin-bottom:6px;">Price *</label><div style="display:flex;"><span style="background:var(--dark-card);border:1px solid var(--border);border-radius:10px 0 0 10px;padding:11px 14px;color:var(--text-dim);font-size:13px;">$</span><input type="number" name="variants[0][price]" value="<%= product.variants[0]?.price %>" step="0.01" required style="flex:1;background:var(--dark-card);border:1px solid var(--border);border-left:none;border-radius:0 10px 10px 0;padding:11px 16px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;"></div></div>
+                            <div><label style="display:block;font-size:12px;font-weight:600;color:var(--text-dim);margin-bottom:6px;">Compare at Price</label><div style="display:flex;"><span style="background:var(--dark-card);border:1px solid var(--border);border-radius:10px 0 0 10px;padding:11px 14px;color:var(--text-dim);font-size:13px;">$</span><input type="number" name="variants[0][compare_at_price]" value="<%= product.variants[0]?.compare_at_price %>" step="0.01" style="flex:1;background:var(--dark-card);border:1px solid var(--border);border-left:none;border-radius:0 10px 10px 0;padding:11px 16px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;"></div></div>
                         </div>
                     </div>
-                    
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-header bg-white">
-                                <h6 class="mb-0">Pricing</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label class="form-label">Price *</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" name="variants[0][price]" value="<%= product.variants[0]?.price %>" step="0.01" required>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Compare at Price</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" name="variants[0][compare_at_price]" value="<%= product.variants[0]?.compare_at_price %>" step="0.01">
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="card-3d mb-3">
+                        <div class="card-head"><h6>Inventory</h6></div>
+                        <div class="card-body-padded">
+                            <div style="margin-bottom:14px;"><label style="display:block;font-size:12px;font-weight:600;color:var(--text-dim);margin-bottom:6px;">SKU</label><input type="text" name="variants[0][sku]" value="<%= product.variants[0]?.sku %>" style="width:100%;background:var(--dark-card);border:1px solid var(--border);border-radius:10px;padding:11px 16px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;"></div>
+                            <div><label style="display:block;font-size:12px;font-weight:600;color:var(--text-dim);margin-bottom:6px;">Barcode</label><input type="text" name="variants[0][barcode]" value="<%= product.variants[0]?.barcode %>" style="width:100%;background:var(--dark-card);border:1px solid var(--border);border-radius:10px;padding:11px 16px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;"></div>
                         </div>
-                        
-                        <div class="card mt-3">
-                            <div class="card-header bg-white">
-                                <h6 class="mb-0">Inventory</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label class="form-label">SKU</label>
-                                    <input type="text" class="form-control" name="variants[0][sku]" value="<%= product.variants[0]?.sku %>">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Barcode</label>
-                                    <input type="text" class="form-control" name="variants[0][barcode]" value="<%= product.variants[0]?.barcode %>">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card mt-3">
-                            <div class="card-header bg-white">
-                                <h6 class="mb-0">Shipping</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label class="form-label">Weight</label>
-                                    <input type="number" class="form-control" name="variants[0][weight]" value="<%= product.variants[0]?.weight %>" step="0.01">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Weight Unit</label>
-                                    <select class="form-select" name="variants[0][weight_unit]">
-                                        <option value="kg" <%= product.variants[0]?.weight_unit === 'kg' ? 'selected' : '' %>>kg</option>
-                                        <option value="g" <%= product.variants[0]?.weight_unit === 'g' ? 'selected' : '' %>>g</option>
-                                        <option value="lb" <%= product.variants[0]?.weight_unit === 'lb' ? 'selected' : '' %>>lb</option>
-                                        <option value="oz" <%= product.variants[0]?.weight_unit === 'oz' ? 'selected' : '' %>>oz</option>
-                                    </select>
-                                </div>
+                    </div>
+                    <div class="card-3d">
+                        <div class="card-head"><h6>Shipping</h6></div>
+                        <div class="card-body-padded">
+                            <div style="margin-bottom:14px;"><label style="display:block;font-size:12px;font-weight:600;color:var(--text-dim);margin-bottom:6px;">Weight</label><input type="number" name="variants[0][weight]" value="<%= product.variants[0]?.weight %>" step="0.01" style="width:100%;background:var(--dark-card);border:1px solid var(--border);border-radius:10px;padding:11px 16px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;"></div>
+                            <div><label style="display:block;font-size:12px;font-weight:600;color:var(--text-dim);margin-bottom:6px;">Weight Unit</label>
+                                <select name="variants[0][weight_unit]" style="width:100%;background:var(--dark-card);border:1px solid var(--border);border-radius:10px;padding:11px 16px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;cursor:pointer;">
+                                    <option value="kg" <%= product.variants[0]?.weight_unit === 'kg' ? 'selected' : '' %>>kg</option><option value="g" <%= product.variants[0]?.weight_unit === 'g' ? 'selected' : '' %>>g</option><option value="lb" <%= product.variants[0]?.weight_unit === 'lb' ? 'selected' : '' %>>lb</option><option value="oz" <%= product.variants[0]?.weight_unit === 'oz' ? 'selected' : '' %>>oz</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="mt-4">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save me-2"></i>Update Product
-                    </button>
-                    <a href="/products/<%= product.id %>" class="btn btn-secondary">Cancel</a>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div style="margin-top:24px;display:flex;gap:10px;">
+                <button type="submit" class="btn-3d"><i class="fas fa-save"></i> Update Product</button>
+                <a href="/products/<%= product.id %>" style="background:var(--dark-card);border:1px solid var(--border);border-radius:12px;padding:12px 24px;font-size:13px;font-weight:600;color:var(--text-dim);text-decoration:none;">Cancel</a>
+            </div>
+        </form>
     </div>
 </div>

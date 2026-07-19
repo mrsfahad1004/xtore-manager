@@ -1,0 +1,839 @@
+{%- liquid
+  assign main_menu = linklists[section.settings.main_menu_link_list]
+-%}
+
+{%- style -%}
+/* === AMAZON STYLE HEADER FOR XTORE === */
+.xtore-header * { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* Top Utility Bar */
+.xt-top-bar {
+  background: #060000;
+  padding: 6px 0;
+  font-size: 13px;
+}
+.xt-top-bar .page-width {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.xt-top-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.xt-top-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.xt-top-link:hover { color: #F5B904; }
+.xt-top-link-sub {
+  font-size: 11px;
+  color: #aaa;
+  display: block;
+  line-height: 1.2;
+}
+.xt-top-link-main {
+  font-weight: 600;
+  font-size: 13px;
+  display: block;
+  line-height: 1.2;
+}
+.xt-cart {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #fff;
+  text-decoration: none;
+  position: relative;
+}
+.xt-cart:hover { color: #F5B904; }
+.xt-cart-count {
+  position: absolute;
+  top: -6px;
+  right: -2px;
+  background: #F5B904;
+  color: #060000;
+  font-size: 11px;
+  font-weight: 800;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Main Header - Logo + Deliver + Search in ONE line */
+.xt-main-header {
+  background: #0d0d0d;
+  padding: 12px 0;
+}
+.xt-main-header .page-width {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Logo */
+.xt-logo {
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+.xt-logo a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+.xt-logo-text {
+  font-size: 28px;
+  font-weight: 900;
+  color: #F5B904;
+  letter-spacing: -1px;
+  white-space: nowrap;
+  line-height: 1;
+}
+.xt-logo-text span {
+  color: #fff;
+  font-weight: 300;
+}
+.xt-logo-tagline {
+  font-size: 9px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: block;
+  margin-top: -2px;
+}
+
+/* Deliver */
+.xt-deliver {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #ccc;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  transition: border-color 0.2s;
+}
+.xt-deliver:hover { color: #F5B904; border-color: rgba(255,255,255,0.2); }
+.xt-deliver-loc {
+  font-size: 11px;
+  color: #aaa;
+  display: block;
+  line-height: 1.2;
+}
+.xt-deliver-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  display: block;
+  line-height: 1.2;
+}
+
+/* Hamburger / All Menu */
+.xt-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+}
+.xt-all-btn:hover { border-color: #fff; }
+.xt-hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.xt-hamburger span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: #fff;
+  border-radius: 1px;
+}
+
+/* Search Bar */
+.xt-search {
+  flex: 1;
+  display: flex;
+  height: 48px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.xt-search-category {
+  padding: 0 10px;
+  background: #e8e8e8;
+  border: none;
+  font-size: 12px;
+  color: #555;
+  cursor: pointer;
+  min-width: 60px;
+  border-right: 1px solid #cdcdcd;
+}
+.xt-search-input {
+  flex: 1;
+  padding: 0 15px;
+  border: none;
+  font-size: 15px;
+  outline: none;
+  background: #fff;
+  color: #111;
+}
+.xt-search-input::placeholder { color: #999; }
+.xt-search-btn {
+  width: 50px;
+  background: #F5B904;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.xt-search-btn:hover { background: #e6ab00; }
+.xt-search-btn svg { width: 22px; height: 22px; }
+
+/* Header Right Actions */
+.xt-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.xt-header-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  transition: border-color 0.2s;
+  white-space: nowrap;
+  position: relative;
+}
+.xt-header-action:hover { border-color: rgba(255,255,255,0.3); color: #F5B904; }
+.xt-header-action svg { width: 24px; height: 24px; flex-shrink: 0; }
+.xt-header-action-label {
+  font-size: 11px;
+  color: #ccc;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+.xt-header-action:hover .xt-header-action-label { color: #F5B904; }
+.xt-header-action-sub {
+  font-size: 10px;
+  color: #888;
+  line-height: 1.1;
+}
+.xt-header-action:hover .xt-header-action-sub { color: #F5B904; }
+.xt-header-cart {
+  position: relative;
+}
+.xt-header-cart-count {
+  position: absolute;
+  top: -2px;
+  right: 0px;
+  background: #F5B904;
+  color: #060000;
+  font-size: 11px;
+  font-weight: 800;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bottom Nav */
+.xt-bottom-nav {
+  background: #131313;
+  padding: 6px 0;
+  border-top: 1px solid #222;
+}
+.xt-bottom-nav .page-width {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding-left: 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.xt-bottom-nav::-webkit-scrollbar { display: none; }
+.xt-nav-link {
+  color: #F5B904;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+.xt-nav-link:hover {
+  color: #fff;
+  border-color: rgba(245,185,4,0.5);
+  background: rgba(245,185,4,0.1);
+}
+.xt-nav-link.active {
+  color: #fff;
+  font-weight: 700;
+  background: rgba(245,185,4,0.15);
+  border-color: rgba(245,185,4,0.3);
+}
+
+/* All Button + Mega Dropdown */
+.xt-all-mega-wrap {
+  position: relative;
+}
+.xt-all-toggle {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  line-height: 1.2;
+}
+.xt-all-trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.xt-mega-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 0 0 8px 8px;
+  padding: 16px 0;
+  min-width: 100%;
+  max-width: 100vw;
+  z-index: 10000;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+}
+.xt-all-mega-wrap.is-open .xt-mega-menu {
+  display: block;
+}
+@media (min-width: 1200px) {
+  .xt-mega-menu { min-width: 1000px; }
+}
+.xt-mega-inner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px 20px;
+  padding: 0 16px;
+  max-height: 450px;
+  overflow-y: auto;
+}
+.xt-mega-inner::-webkit-scrollbar { width: 6px; }
+.xt-mega-inner::-webkit-scrollbar-track { background: #222; border-radius: 3px; }
+.xt-mega-inner::-webkit-scrollbar-thumb { background: #555; border-radius: 3px; }
+.xt-mega-col {
+  min-width: 0;
+  padding: 4px 0;
+  border-right: 1px solid #2a2a2a;
+}
+.xt-mega-col:last-child { border-right: none; }
+.xt-mega-col h4 {
+  color: #F5B904;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 10px 8px;
+  border-bottom: 1px solid #333;
+  margin-bottom: 6px;
+}
+.xt-mega-item {
+  padding: 0;
+}
+.xt-mega-parent {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.xt-mega-parent:hover {
+  background: rgba(245,185,4,0.15);
+  color: #F5B904;
+}
+.xt-mega-sub {
+  padding: 2px 0 6px 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+.xt-mega-sub a {
+  display: block;
+  color: #bbb;
+  text-decoration: none;
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 3px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.xt-mega-sub a:hover {
+  color: #F5B904;
+  background: rgba(245,185,4,0.1);
+}
+
+/* Hide old top bar */
+.xt-top-bar { display: none; }
+
+/* Mobile */
+.xt-mobile-header {
+  display: none;
+  background: #060000;
+  padding: 10px 15px;
+  align-items: center;
+  gap: 10px;
+}
+.xt-mobile-hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+.xt-mobile-hamburger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #fff;
+  margin: 4px 0;
+  border-radius: 1px;
+}
+.xt-mobile-logo { flex: 1; }
+.xt-mobile-logo a {
+  font-size: 20px;
+  font-weight: 900;
+  color: #F5B904;
+  text-decoration: none;
+}
+.xt-mobile-logo a span { color: #fff; font-weight: 300; }
+.xt-mobile-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.xt-mobile-actions a { color: #fff; position: relative; }
+.xt-mobile-search {
+  display: none;
+  background: #1a1a1a;
+  padding: 8px 15px;
+  border-bottom: 1px solid #222;
+}
+.xt-mobile-search input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #0d0d0d;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+}
+.xt-mobile-search input::placeholder { color: #666; }
+
+@media (max-width: 999px) {
+  .xt-top-bar, .xt-main-header, .xt-bottom-nav { display: none !important; }
+  .xt-mobile-header { display: flex; }
+  .xt-mobile-search { display: block; }
+}
+@media (min-width: 1000px) {
+  .xt-mobile-header, .xt-mobile-search { display: none !important; }
+}
+{%- endstyle -%}
+
+<div class="xtore-header" data-section-id="{{ section.id }}">
+  
+  <!-- DESKTOP -->
+  
+  <!-- Top Utility Bar -->
+  <div class="xt-top-bar">
+    <div class="page-width">
+      <div class="xt-top-right">
+        <a href="/account/login" class="xt-top-link">
+          <span class="xt-top-link-sub">Hello, Sign in</span>
+          <span class="xt-top-link-main">Account & Lists</span>
+        </a>
+        <a href="/account" class="xt-top-link">
+          <span class="xt-top-link-sub">Your</span>
+          <span class="xt-top-link-main">Orders</span>
+        </a>
+        <a href="/cart" class="xt-cart">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+          <span class="xt-cart-count" id="xtCartCount">{{ cart.item_count }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Header: Logo + Deliver + All + Search -->
+  <div class="xt-main-header">
+    <div class="page-width">
+      <!-- Logo -->
+      <div class="xt-logo">
+        <a href="{{ routes.root_url }}">
+          <img src="{{ 'xtore-logo.jpg' | asset_url }}" alt="Xtore" style="height:64px;width:auto;">
+        </a>
+      </div>
+
+      <!-- Deliver to -->
+      <div class="xt-deliver">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div>
+          <span class="xt-deliver-loc">Deliver to</span>
+          <span class="xt-deliver-text">Worldwide</span>
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <form action="/search" method="get" class="xt-search">
+        <select name="type" class="xt-search-category">
+          <option value="product">All</option>
+          {%- for link in main_menu.links -%}
+            <option value="product">{{ link.title }}</option>
+          {%- endfor -%}
+        </select>
+        <input type="text" name="q" placeholder="Search Xtore" class="xt-search-input" autocomplete="off">
+        <button type="submit" class="xt-search-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#060000" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </button>
+      </form>
+
+      <!-- Account, Orders, Cart -->
+      <div class="xt-header-actions">
+        <a href="/account" class="xt-header-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span class="xt-header-action-label">Account</span>
+          <span class="xt-header-action-sub">&amp; Lists</span>
+        </a>
+        <a href="/account" class="xt-header-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <span class="xt-header-action-label">Your</span>
+          <span class="xt-header-action-sub">Orders</span>
+        </a>
+        <a href="/cart" class="xt-header-action xt-header-cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+          <span class="xt-header-cart-count" id="xtHeaderCartCount">{{ cart.item_count }}</span>
+          <span class="xt-header-action-label">Cart</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="xt-bottom-nav">
+    <div class="page-width">
+      <div class="xt-all-mega-wrap" id="xtMegaWrap">
+        <button type="button" class="xt-nav-link active xt-all-trigger xt-all-toggle" id="xtAllBtn" aria-expanded="false" aria-controls="xtMegaMenu">
+          <svg style="vertical-align:middle;margin-right:3px;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          All
+        </button>
+        <div class="xt-mega-menu" id="xtMegaMenu">
+          <div class="xt-mega-inner">
+            <div class="xt-mega-col">
+              <h4>Shop by Category</h4>
+              <div class="xt-mega-item">
+                <a href="/collections/new-arrivals" class="xt-mega-parent">New Arrivals</a>
+                <div class="xt-mega-sub">
+                  <a href="/collections/new-arrivals">New in Fashion</a>
+                  <a href="/collections/electronics">New in Electronics</a>
+                  <a href="/collections/beauty-skincare">New in Beauty</a>
+                  <a href="/collections/home-goods">New in Home</a>
+                  <a href="/collections/bags-accessories">New in Accessories</a>
+                </div>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/sale-offers" class="xt-mega-parent">Sale &amp; Offers</a>
+                <div class="xt-mega-sub">
+                  <a href="/collections/sale-offers">Clearance Sale</a>
+                  <a href="/collections/sale-offers">Flash Deals</a>
+                  <a href="/collections/sale-offers">Bundle Offers</a>
+                  <a href="/collections/sale-offers">Buy 1 Get 1</a>
+                  <a href="/collections/sale-offers">Seasonal Discounts</a>
+                </div>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/best-sellers" class="xt-mega-parent">Best Sellers</a>
+                <div class="xt-mega-sub">
+                  <a href="/collections/best-sellers">Trending Now</a>
+                  <a href="/collections/best-sellers">Top Rated</a>
+                  <a href="/collections/best-sellers">Most Popular</a>
+                  <a href="/collections/best-sellers">Staff Picks</a>
+                  <a href="/collections/best-sellers">Best Deals</a>
+                </div>
+              </div>
+            </div>
+            <div class="xt-mega-col">
+              <h4>Fashion</h4>
+              <div class="xt-mega-item">
+                <a href="/collections/mens-collection" class="xt-mega-parent">Men's Collection</a>
+                <div class="xt-mega-sub">
+                  <a href="/collections/mens-shirts">Men's Shirts</a>
+                  <a href="/collections/mens-pants-trousers">Men's Pants &amp; Trousers</a>
+                  <a href="/collections/mens-jackets-coats">Men's Jackets &amp; Coats</a>
+                  <a href="/collections/mens-tshirts-polos">Men's T-Shirts &amp; Polos</a>
+                  <a href="/collections/mens-traditional-wear">Men's Traditional Wear</a>
+                </div>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/womens-collection" class="xt-mega-parent">Women's Collection</a>
+                <div class="xt-mega-sub">
+                  <a href="/collections/womens-dresses">Women's Dresses</a>
+                  <a href="/collections/womens-tops-blouses">Women's Tops &amp; Blouses</a>
+                  <a href="/collections/womens-bottoms">Women's Bottoms</a>
+                  <a href="/collections/womens-ethnic-wear">Women's Ethnic Wear</a>
+                  <a href="/collections/womens-outerwear">Women's Outerwear</a>
+                </div>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/kids-collection" class="xt-mega-parent">Kids Collection</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/clothing" class="xt-mega-parent">Clothing</a>
+                <div class="xt-mega-sub">
+                  <a href="/collections/casual-wear">Casual Wear</a>
+                  <a href="/collections/formal-wear">Formal Wear</a>
+                  <a href="/collections/activewear-clothing">Activewear</a>
+                  <a href="/collections/loungewear-sleepwear">Loungewear &amp; Sleepwear</a>
+                  <a href="/collections/workwear-uniforms">Workwear &amp; Uniforms</a>
+                </div>
+              </div>
+            </div>
+            <div class="xt-mega-col">
+              <h4>Accessories &amp; Lifestyle</h4>
+              <div class="xt-mega-item">
+                <a href="/collections/ethnic-traditional-wear" class="xt-mega-parent">Ethnic &amp; Traditional Wear</a>
+                <div class="xt-mega-sub">
+                  <a href="/collections/ethnic-traditional-wear">Kurtas &amp; Kurtis</a>
+                  <a href="/collections/ethnic-traditional-wear">Shalwar Kameez</a>
+                  <a href="/collections/ethnic-traditional-wear">Sarees &amp; Dupattas</a>
+                  <a href="/collections/ethnic-traditional-wear">Lehengas &amp; Shararas</a>
+                  <a href="/collections/ethnic-traditional-wear">Waistcoats &amp; Nehru Jackets</a>
+                </div>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/shoes-footwear" class="xt-mega-parent">Shoes &amp; Footwear</a>
+                <div class="xt-mega-sub">
+                  <a href="/collections/sneakers-sports-shoes">Sneakers &amp; Sports Shoes</a>
+                  <a href="/collections/formal-shoes">Formal Shoes</a>
+                  <a href="/collections/sandals-slippers">Sandals &amp; Slippers</a>
+                </div>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/bags-accessories" class="xt-mega-parent">Bags &amp; Accessories</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/jewellery" class="xt-mega-parent">Jewellery</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/watches" class="xt-mega-parent">Watches</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/sunglasses-eyewear" class="xt-mega-parent">Sunglasses &amp; Eyewear</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/fragrances-perfumes" class="xt-mega-parent">Fragrances &amp; Perfumes</a>
+              </div>
+            </div>
+            <div class="xt-mega-col">
+              <h4>Electronics &amp; More</h4>
+              <div class="xt-mega-item">
+                <a href="/collections/electronics" class="xt-mega-parent">Electronics</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/mobile-accessories" class="xt-mega-parent">Mobile Accessories</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/beauty-skincare" class="xt-mega-parent">Beauty &amp; Skincare</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/health-wellness" class="xt-mega-parent">Health &amp; Wellness</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/undergarments-innerwear" class="xt-mega-parent">Undergarments &amp; Innerwear</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/home-goods" class="xt-mega-parent">Home Goods</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/kitchen-dining" class="xt-mega-parent">Kitchen &amp; Dining</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/daily-essentials" class="xt-mega-parent">Daily Essentials</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/food-grocery" class="xt-mega-parent">Food &amp; Grocery</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/books-stationery" class="xt-mega-parent">Books &amp; Stationery</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/sports-fitness" class="xt-mega-parent">Sports &amp; Fitness</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/toys-games" class="xt-mega-parent">Toys &amp; Games</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/pet-supplies" class="xt-mega-parent">Pet Supplies</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/summer-collection" class="xt-mega-parent">Summer Collection</a>
+              </div>
+              <div class="xt-mega-item">
+                <a href="/collections/winter-collection" class="xt-mega-parent">Winter Collection</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%- for link in main_menu.links limit: 8 -%}
+        <a href="{{ link.url }}" class="xt-nav-link">{{ link.title }}</a>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <!-- MOBILE -->
+  <div class="xt-mobile-header">
+    <button class="xt-mobile-hamburger" onclick="document.querySelector('.drawer-menu').classList.add('is-active')">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="xt-mobile-logo">
+      <a href="{{ routes.root_url }}"><img src="{{ 'xtore-logo.jpg' | asset_url }}" alt="Xtore" style="height:44px;width:auto;"></a>
+    </div>
+    <div class="xt-mobile-actions">
+      <a href="/search">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </a>
+      <a href="/cart">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+        <span class="xt-cart-count" style="top:-8px;right:-8px;">{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+  <div class="xt-mobile-search">
+    <form action="/search" method="get">
+      <input type="text" name="q" placeholder="Search Xtore">
+    </form>
+  </div>
+
+</div>
+
+<script>
+fetch('/cart.js').then(function(r){return r.json()}).then(function(j){
+  var count = j.item_count;
+  document.querySelectorAll('.xt-cart-count').forEach(function(el){ el.textContent = count; });
+  document.querySelectorAll('#xtHeaderCartCount').forEach(function(el){ el.textContent = count; });
+}).catch(function(){});
+
+(function(){
+  var wrap = document.getElementById('xtMegaWrap');
+  var btn = document.getElementById('xtAllBtn');
+  var menu = document.getElementById('xtMegaMenu');
+  if (!wrap || !btn || !menu) return;
+
+  function positionMenu() {
+    var rect = btn.getBoundingClientRect();
+    menu.style.top = rect.bottom + 'px';
+    menu.style.left = '0px';
+    menu.style.width = '100vw';
+    menu.style.maxWidth = '100vw';
+  }
+
+  function openMenu() {
+    positionMenu();
+    wrap.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeMenu() {
+    wrap.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (wrap.classList.contains('is-open')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  var hoverTimeout;
+  wrap.addEventListener('mouseenter', function() {
+    clearTimeout(hoverTimeout);
+    openMenu();
+  });
+  wrap.addEventListener('mouseleave', function() {
+    hoverTimeout = setTimeout(function() {
+      closeMenu();
+    }, 300);
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!wrap.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeMenu();
+    }
+  });
+
+  window.addEventListener('scroll', function() {
+    if (wrap.classList.contains('is-open')) {
+      positionMenu();
+    }
+  }, {passive: true});
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Amazon Header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "main_menu_link_list",
+      "label": "Main Menu",
+      "default": "main-menu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Amazon Header"
+    }
+  ]
+}
+{% endschema %}
